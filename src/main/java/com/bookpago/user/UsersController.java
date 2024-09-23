@@ -1,12 +1,10 @@
-package invincibleDevs.bookpago.users.controller;
+package com.bookpago.user;
 
-import invincibleDevs.bookpago.users.dto.request.KakaoJoinRequest;
-import invincibleDevs.bookpago.users.dto.request.KakaoSignInRequest;
-import invincibleDevs.bookpago.users.dto.response.SignInResponse;
-import invincibleDevs.bookpago.users.dto.response.SignUpResponse;
-import invincibleDevs.bookpago.users.facade.UserFacade;
-import invincibleDevs.bookpago.users.repository.UserRepository;
-import io.swagger.annotations.ApiParam;
+import com.bookpago.user.domain.UserRepository;
+import com.bookpago.user.dto.request.KakaoJoinRequest;
+import com.bookpago.user.dto.request.KakaoSignInRequest;
+import com.bookpago.user.dto.response.SignInResponse;
+import com.bookpago.user.dto.response.SignUpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,45 +26,20 @@ public class UsersController {
 
     @GetMapping("/login")
     public ResponseEntity<SignInResponse> signIn(
-            @ApiParam(value = "serverToken", required = true) @RequestParam(value = "username") String username
-//            @RequestHeader(value = "Authorization", required = true) String serverToken
-    ) {
-//        System.out.println(serverToken);
+            @RequestParam(value = "username") String username) {
         return ResponseEntity.ok(userFacade.signInUser(username));
-//        return ResponseEntity.ok(profileFacade.getProfile(profileRequest,username,page,size));
     }
-
 
     @GetMapping("/kakaologin")
     public ResponseEntity<SignInResponse> kakaoLogin(
-            @ApiParam(value = "kakaoAccessToken", required = true) @RequestHeader(value = "Authorization", required = true) String kakaoAccessToken) {
+            @RequestHeader(value = "Authorization") String kakaoAccessToken) {
         KakaoSignInRequest kakaoSignInRequest = new KakaoSignInRequest(kakaoAccessToken);
         return ResponseEntity.ok(userFacade.kakaoLoginUser(kakaoSignInRequest));
     }
 
     @PostMapping("/kakaojoin")
     public ResponseEntity<SignUpResponse> kakaoJoin(  //프론트가 액세스토큰 body에 담아서 줌
-            @ApiParam(value = "회원 등록 정보, 카카오 토큰 필수") @RequestBody KakaoJoinRequest kakaoJoinRequest) {
-//        System.out.println(kakaoJoinRequest.kakaoOauthToken());
-        System.out.println(kakaoJoinRequest.username());
-        System.out.println(kakaoJoinRequest.birth());
-        System.out.println("========================================");
+            @RequestBody KakaoJoinRequest kakaoJoinRequest) {
         return ResponseEntity.ok(userFacade.kakaoJoinUser(kakaoJoinRequest));
     }
-
-    @GetMapping("/check")
-    public String checkUser(
-            @RequestHeader(value = "Authorization", required = true) String serverToken) {
-//        SignInRequest signInRequest = new SignInRequest(serverToken);
-//        System.out.println(username);
-        System.out.println(serverToken);
-//        if (userRepository.existsByUsername(username)) {
-//            UserEntity userEntity  = userRepository.findByUsername(username);
-//            return userEntity.getNickname();
-//        }
-
-        return "error";
-    }
-
-
 }

@@ -1,4 +1,4 @@
-package invincibleDevs.bookpago.users.domain;
+package com.bookpago.user.domain;
 
 public enum Gender {
     MALE, FEMALE;

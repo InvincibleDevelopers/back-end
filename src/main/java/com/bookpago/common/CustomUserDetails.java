@@ -1,6 +1,6 @@
-package invincibleDevs.bookpago.common;
+package com.bookpago.common;
 
-import invincibleDevs.bookpago.users.domain.User;
+import com.bookpago.user.domain.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,14 +37,13 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add((GrantedAuthority) user::getRole);
-
+//        collection.add((GrantedAuthority) user::getRole);
         return collection;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return "";
     }
 
     @Override

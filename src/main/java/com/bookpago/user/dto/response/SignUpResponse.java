@@ -1,4 +1,4 @@
-package invincibleDevs.bookpago.users.dto.response;
+package com.bookpago.user.dto.response;
 
 public record SignUpResponse(
         String username,

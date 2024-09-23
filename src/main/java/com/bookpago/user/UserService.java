@@ -1,18 +1,15 @@
-package invincibleDevs.bookpago.users.service;
+package com.bookpago.user;
 
+import com.bookpago.common.JWTUtil;
+import com.bookpago.common.exception.CustomException;
+import com.bookpago.user.domain.User;
+import com.bookpago.user.domain.UserRepository;
+import com.bookpago.user.dto.request.KakaoJoinRequest;
+import com.bookpago.user.dto.request.KakaoSignInRequest;
+import com.bookpago.user.dto.response.SignInResponse;
+import com.bookpago.user.dto.response.SignUpResponse;
 import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.nimbusds.jose.shaded.gson.JsonParser;
-import invincibleDevs.bookpago.common.JWTUtil;
-import invincibleDevs.bookpago.common.exception.CustomException;
-import invincibleDevs.bookpago.profile.model.Profile;
-import invincibleDevs.bookpago.profile.repository.ProfileRepository;
-import invincibleDevs.bookpago.users.domain.User;
-import invincibleDevs.bookpago.users.dto.request.KakaoJoinRequest;
-import invincibleDevs.bookpago.users.dto.request.KakaoSignInRequest;
-import invincibleDevs.bookpago.users.dto.response.SignInResponse;
-import invincibleDevs.bookpago.users.dto.response.SignUpResponse;
-import invincibleDevs.bookpago.users.repository.UserRepository;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -26,10 +23,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class UserEntityService {
+public class UserService {
 
     private final UserRepository userRepository;
-    private final ProfileRepository profileRepository;
     private final JWTUtil jwtUtil;
 
     public boolean isUserExists(String username) {
@@ -40,35 +36,17 @@ public class UserEntityService {
         return userRepository.findByUsername(username);
     }
 
+    //기능 : 유저아이디 널이면 , false반환. 유저아이디 잇으면 아디 이름 반환.
     @Transactional
-    public SignInResponse signInUser(
-            String username) { //기능 : 유저아이디 널이면 , false반환. 유저아이디 잇으면 아디 이름 반환.
+    public SignInResponse signInUser(String username) {
         try {
-//           String username = Utils.getAuthenticatedUsername();
-//           System.out.println(signInRequest.serverToken());
-//           System.out.println(username);
             User user = userRepository.findByUsername(username);
-            return new SignInResponse(
-                    true,
-                    Optional.ofNullable(user.getUsername()),
-                    Optional.ofNullable(user.getNickname()),
-                    // Make sure to pass `nickname` if needed
-                    null,
-                    user.getProfile().getProfileImgUrl()
-            );
-
+            return new SignInResponse(true, Optional.ofNullable(user.getUsername()),
+                    Optional.ofNullable(user.getNickname()), null, user.getProfileUrl());
         } catch (CustomException e) {
             return new SignInResponse(false, Optional.empty(), Optional.empty(), Optional.empty(),
                     null);
-
         }
-//        if (userRepository.existsByUsername(username)) { //DB엔 String타입 저장되어있음
-//            UserEntity userEntity = userRepository.findByUsername(signInRequest.username().toString());
-//            String serverToken = jwtUtil.createJwt(userEntity.getUsername(), "USER",60*60*1000*10L);
-//            return new SignInResponse(true, Optional.ofNullable(userEntity.getUsername()), Optional.ofNullable(userEntity.getNickname()),Optional.ofNullable(serverToken));
-//        } else {
-//            return new SignInResponse(false, Optional.empty(), Optional.empty(),Optional.empty());
-//        }
     }
 
     @Transactional
@@ -81,12 +59,9 @@ public class UserEntityService {
 
         HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                "https://kapi.kakao.com/v2/user/me", //post요청보낼 주소
-                HttpMethod.POST,
-                kakaoProfileRequest,
-                String.class
-        );
+        ResponseEntity<String> response = restTemplate.exchange("https://kapi.kakao.com/v2/user/me",
+                //post요청보낼 주소
+                HttpMethod.POST, kakaoProfileRequest, String.class);
         System.out.println(response);
 
         // JSON 문자열 파싱
@@ -96,19 +71,18 @@ public class UserEntityService {
         long id = rootObject.get("id").getAsLong();
         String username = Long.toString(id);
 
-        if (userRepository.existsByUsername(username)) { //DB엔 String타입 저장되어있음
+        //DB엔 String타입 저장되어있음
+        if (userRepository.existsByUsername(username)) {
             User user = userRepository.findByUsername(username);
             String serverToken = jwtUtil.createJwt(user.getUsername(), "USER",
                     60 * 60 * 1000 * 10L);
             return new SignInResponse(true, Optional.ofNullable(user.getUsername()),
-                    Optional.ofNullable(
-                            user.getNickname()), Optional.ofNullable(serverToken),
-                    user.getProfile().getProfileImgUrl());
-        } else {
-            return new SignInResponse(false, Optional.empty(), Optional.empty(), Optional.empty(),
-                    null);
+                    Optional.ofNullable(user.getNickname()), Optional.ofNullable(serverToken),
+                    user.getProfileUrl());
         }
 
+        return new SignInResponse(false, Optional.empty(), Optional.empty(), Optional.empty(),
+                null);
     }
 
 
@@ -121,12 +95,9 @@ public class UserEntityService {
 
         HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                "https://kapi.kakao.com/v2/user/me", //post요청보낼 주소
-                HttpMethod.POST,
-                kakaoProfileRequest,
-                String.class
-        );
+        ResponseEntity<String> response = restTemplate.exchange("https://kapi.kakao.com/v2/user/me",
+                //post요청보낼 주소
+                HttpMethod.POST, kakaoProfileRequest, String.class);
         System.out.println(response);
 
         // JSON 문자열 파싱
@@ -135,29 +106,24 @@ public class UserEntityService {
         // id와 nickname 추출
         long id = rootObject.get("id").getAsLong();
         String username = Long.toString(id);
-        String nickname = rootObject.get("properties").getAsJsonObject().get(
-                "nickname").getAsString();
+        String nickname = rootObject.get("properties")
+                .getAsJsonObject().get("nickname").getAsString();
 
         // 응답의 상태 코드 확인
         if (response.getStatusCode().is2xxSuccessful()) {
             User user = User.builder()
                     .username(username)
-                    .nickname(kakaoJoinRequest.nickname())
+                    .nickname(nickname)
                     .gender(kakaoJoinRequest.gender())
-                    .age(kakaoJoinRequest.birth())
-                    .created_at(LocalDateTime.now())
+                    .birth(kakaoJoinRequest.birth())
                     .build();
             userRepository.save(user);
-            Profile profile = Profile.builder()
-                    .user(user)
-                    .build();
-            profileRepository.save(profile);
+
             String serverToken = jwtUtil.createJwt(user.getUsername(), "USER", 60 * 1000L);
             return new SignUpResponse(user.getUsername(), user.getNickname(), serverToken);
-        } else {
-            throw new IllegalArgumentException("Invalid access token: " + response.getBody());
         }
 
+        throw new IllegalArgumentException("Invalid access token: " + response.getBody());
     }
 
     public User findByUserName(String username) {

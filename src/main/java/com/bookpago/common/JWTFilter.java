@@ -1,6 +1,6 @@
-package invincibleDevs.bookpago.common;
+package com.bookpago.common;
 
-import invincibleDevs.bookpago.users.domain.User;
+import com.bookpago.user.domain.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

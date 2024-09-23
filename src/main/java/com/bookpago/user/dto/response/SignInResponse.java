@@ -1,4 +1,4 @@
-package invincibleDevs.bookpago.users.dto.response;
+package com.bookpago.user.dto.response;
 
 import java.util.Optional;
 
@@ -8,7 +8,6 @@ public record SignInResponse(
         Optional<String> nickname,
         Optional<String> serverToken,
         String imageUrl
-
 ) {
 
 }

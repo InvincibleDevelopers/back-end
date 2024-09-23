@@ -1,6 +1,6 @@
-package invincibleDevs.bookpago.common;
+package com.bookpago.common;
 
-import invincibleDevs.bookpago.users.repository.UserRepository;
+import com.bookpago.user.domain.UserRepository;
 import java.util.Collections;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

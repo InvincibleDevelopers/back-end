@@ -1,10 +1,9 @@
-package invincibleDevs.bookpago.users.facade;
+package com.bookpago.user;
 
-import invincibleDevs.bookpago.users.dto.request.KakaoJoinRequest;
-import invincibleDevs.bookpago.users.dto.request.KakaoSignInRequest;
-import invincibleDevs.bookpago.users.dto.response.SignInResponse;
-import invincibleDevs.bookpago.users.dto.response.SignUpResponse;
-import invincibleDevs.bookpago.users.service.UserEntityService;
+import com.bookpago.user.dto.request.KakaoJoinRequest;
+import com.bookpago.user.dto.request.KakaoSignInRequest;
+import com.bookpago.user.dto.response.SignInResponse;
+import com.bookpago.user.dto.response.SignUpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,28 +11,26 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserFacade {
 
-    private final UserEntityService userEntityService;
+    private final UserService userService;
 
     public SignInResponse signInUser(String username) {
-        return userEntityService.signInUser(username);
+        return userService.signInUser(username);
     }
 
     public SignInResponse kakaoLoginUser(KakaoSignInRequest kakaoSignInRequest) {
         try {
-            return userEntityService.kakaoSignInUser(kakaoSignInRequest);
+            return userService.kakaoSignInUser(kakaoSignInRequest);
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid access token : " + e.getMessage());
-            // 예외를 다시 던지거나, 사용자에게 적절한 응답을 반환합니다.
             throw e;
         }
     }
 
     public SignUpResponse kakaoJoinUser(KakaoJoinRequest kakaoJoinRequest) {
         try {
-            return userEntityService.kakaoJoinUser(kakaoJoinRequest);
+            return userService.kakaoJoinUser(kakaoJoinRequest);
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid access token : " + e.getMessage());
-            // 예외를 다시 던지거나, 사용자에게 적절한 응답을 반환합니다.
             throw e;
         }
 

@@ -1,4 +1,4 @@
-package invincibleDevs.bookpago.common;
+package com.bookpago.common;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

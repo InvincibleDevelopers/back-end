@@ -1,8 +1,13 @@
-package invincibleDevs.bookpago.common.config;
+package com.bookpago.common.config;
 
-import invincibleDevs.bookpago.users.repository.UserRepository;
-import invincibleDevs.bookpago.common.*;
+import com.bookpago.common.CustomOAuth2UserService;
+import com.bookpago.common.CustomUserDetailsService;
+import com.bookpago.common.JWTFilter;
+import com.bookpago.common.JWTUtil;
+import com.bookpago.common.LoginFilter;
+import com.bookpago.user.domain.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,8 +23,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-
-import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -92,7 +95,6 @@ public class SecurityConfig {
 
     @Bean
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService() {
-        // UserRepository를 사용하여 CustomOAuth2UserService 생성
         return new CustomOAuth2UserService(userRepository);
     }
 }

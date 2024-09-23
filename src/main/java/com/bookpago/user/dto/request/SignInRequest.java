@@ -1,4 +1,4 @@
-package invincibleDevs.bookpago.users.dto.request;
+package com.bookpago.user.dto.request;
 
 public record SignInRequest(
 //    @ApiModelProperty(value = "카카오 회원 고유 ID", required = true)

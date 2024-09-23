@@ -1,6 +1,5 @@
-package invincibleDevs.bookpago.users.repository;
+package com.bookpago.user.domain;
 
-import invincibleDevs.bookpago.users.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Integer> {

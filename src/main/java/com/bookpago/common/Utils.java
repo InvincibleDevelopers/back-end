@@ -1,6 +1,6 @@
-package invincibleDevs.bookpago.common;
+package com.bookpago.common;
 
-import invincibleDevs.bookpago.common.exception.CustomException;
+import com.bookpago.common.exception.CustomException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -12,7 +12,7 @@ public class Utils {
         if (authentication != null && authentication.isAuthenticated()) {
             return authentication.getName(); // 인증된 사용자 이름 반환
         }
-        
+
         // 인증되지 않은 경우 예외를 던짐
         throw new CustomException("User is not authenticated.");
     }

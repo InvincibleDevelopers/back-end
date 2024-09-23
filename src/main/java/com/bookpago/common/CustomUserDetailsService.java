@@ -1,7 +1,7 @@
-package invincibleDevs.bookpago.common;
+package com.bookpago.common;
 
-import invincibleDevs.bookpago.users.domain.User;
-import invincibleDevs.bookpago.users.repository.UserRepository;
+import com.bookpago.user.domain.User;
+import com.bookpago.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

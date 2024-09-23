@@ -1,4 +1,4 @@
-package invincibleDevs.bookpago.common.config;
+package com.bookpago.common.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -39,7 +39,7 @@ public class S3Config {
     public S3Presigner s3Presigner() {// AWS SDK V2 S3Presigner 빈 생성
         AwsBasicCredentials awsBasicCredentials = AwsBasicCredentials.create(accessKey, secretKey);
         return S3Presigner.builder().region(Region.of(region)) // 리전 정보 명시
-                          .credentialsProvider(
-                                  StaticCredentialsProvider.create(awsBasicCredentials)).build();
+                .credentialsProvider(
+                        StaticCredentialsProvider.create(awsBasicCredentials)).build();
     }
 }
