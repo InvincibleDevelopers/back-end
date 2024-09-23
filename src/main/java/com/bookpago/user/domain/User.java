@@ -1,22 +1,29 @@
 package com.bookpago.user.domain;
 
+import static jakarta.persistence.EnumType.STRING;
+
 import com.bookpago.BaseEntity;
 import com.bookpago.review.Review;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 회원
+ */
 @Entity
 @Getter
 @Builder
@@ -32,8 +39,11 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * 리뷰 목록
+     */
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
 
     /**
      * 회원 이름
@@ -55,6 +65,7 @@ public class User extends BaseEntity {
     /**
      * 성별
      */
+    @Enumerated(STRING)
     private Gender gender;
 
     /**
