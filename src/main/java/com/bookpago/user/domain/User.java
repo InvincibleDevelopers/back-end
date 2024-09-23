@@ -3,6 +3,7 @@ package com.bookpago.user.domain;
 import static jakarta.persistence.EnumType.STRING;
 
 import com.bookpago.BaseEntity;
+import com.bookpago.relationship.UserReadingClub;
 import com.bookpago.review.Review;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -44,6 +45,12 @@ public class User extends BaseEntity {
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
+
+    /**
+     * 내 독서 모임 목록
+     */
+    @OneToMany(mappedBy = "readingClub", cascade = CascadeType.REMOVE)
+    private List<UserReadingClub> readingClubs = new ArrayList<>();
 
     /**
      * 회원 이름
