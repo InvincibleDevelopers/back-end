@@ -16,7 +16,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,8 +51,8 @@ public class User extends BaseEntity {
     /**
      * 내 독서 모임 목록
      */
-    @OneToMany(mappedBy = "readingClub", cascade = CascadeType.REMOVE)
-    private List<UserReadingClub> readingClubs = new ArrayList<>();
+    @OneToMany(mappedBy = "readingClub", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<UserReadingClub> readingClubs = new HashSet<>();
 
     /**
      * 회원 이름
